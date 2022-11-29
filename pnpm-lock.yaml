@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@types/express': ^4.17.14
+  dotenv: 8.2.0
   express: ^4.18.2
   prettier: 1.19.1
   tsc-watch: 4.2.3
@@ -12,6 +13,7 @@ dependencies:
 
 devDependencies:
   '@types/express': registry.npmmirror.com/@types/express/4.17.14
+  dotenv: registry.npmmirror.com/dotenv/8.2.0
   prettier: registry.npmmirror.com/prettier/1.19.1
   tsc-watch: registry.npmmirror.com/tsc-watch/4.2.3_typescript@4.9.3
   typescript: registry.npmmirror.com/typescript/4.9.3
@@ -247,6 +249,13 @@ packages:
     version: 1.2.0
     engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
     dev: false
+
+  registry.npmmirror.com/dotenv/8.2.0:
+    resolution: {integrity: sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dotenv/-/dotenv-8.2.0.tgz}
+    name: dotenv
+    version: 8.2.0
+    engines: {node: '>=8'}
+    dev: true
 
   registry.npmmirror.com/duplexer/0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/duplexer/-/duplexer-0.1.2.tgz}
