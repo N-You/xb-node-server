@@ -1,8 +1,8 @@
-import { connection } from "../app/database/mysql"
-import { PostModel } from "./post.model"
+import { connection } from '../app/database/mysql';
+import { PostModel } from './post.model';
 
 /* 获取列表内容 */
-export const getPosts:any = async ()=>{
+export const getPosts: any = async () => {
   const statement = `
     SELECT 
       post.id,
@@ -15,13 +15,13 @@ export const getPosts:any = async ()=>{
     FROM post
     LEFT JOIN user
       ON user.id = post.userId
-  `
-  const [data] = await connection.promise().query(statement)
-  return data
-}
+  `;
+  const [data] = await connection.promise().query(statement);
+  return data;
+};
 
 /* 创建内容 */
-export const createPost:any = async (post:PostModel)=>{
+export const createPost: any = async (post: PostModel) => {
   // 准备查询
   const statement = `
     INSERT INTO post
@@ -29,14 +29,14 @@ export const createPost:any = async (post:PostModel)=>{
   `;
 
   // 执行查询
-  const [data] = await connection.promise().query(statement,post)
+  const [data] = await connection.promise().query(statement, post);
 
   // 提供数据
   return data;
-}
+};
 
 /* 更新内容 */
-export const updatePost:any = async(postId:number, post:PostModel)=>{
+export const updatePost: any = async (postId: number, post: PostModel) => {
   // 准备查询
   const statement = `
   UPDATE post
@@ -45,14 +45,14 @@ export const updatePost:any = async(postId:number, post:PostModel)=>{
   `;
 
   // 执行查询
-  const [data] = await connection.promise().query(statement,[post,postId])
+  const [data] = await connection.promise().query(statement, [post, postId]);
 
   // 提供数据
-  return data
-}
+  return data;
+};
 
 /* 删除内容 */
-export const deletePost:any = async(postId:number)=>{
+export const deletePost: any = async (postId: number) => {
   // 准备查询
   const statement = `
   DELETE FROM post
@@ -60,8 +60,8 @@ export const deletePost:any = async(postId:number)=>{
   `;
 
   // 执行查询
-  const [data] = await connection.promise().query(statement,postId)
+  const [data] = await connection.promise().query(statement, postId);
 
   // 提供数据
-  return data
-}
+  return data;
+};
