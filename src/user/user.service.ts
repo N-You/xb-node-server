@@ -17,9 +17,18 @@ export const createUser:any = async (user:UserModel) =>{
 }
 
 /* 按用户名查用户 */
-export const getUserByName:any = async(name:string)=>{
+interface GetUserOptions{
+  password?: boolean
+}
+
+export const getUserByName:any = async(name:string,options:GetUserOptions = {})=>{
+  const {password} = options
+
   const statement = `
-  SELECT id,name
+  SELECT 
+  id,
+  name
+  ${ password ? ',password' : '' }
   FROM user
   WHERE name = ?
   `

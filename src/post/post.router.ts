@@ -1,8 +1,8 @@
-import express, { Router } from 'express';
+import  { Router } from 'express';
 import * as postController from './post.controller';
 import { requestUrl } from '../app/app.middleware';
 
-const router: Router = express.Router();
+const router: Router = Router();
 
 /* 内容列表 */
 router.get('/posts', requestUrl, postController.index);
