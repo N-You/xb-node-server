@@ -31,19 +31,23 @@ export const defaultErrorHandler = (
     case `PASSWORD_IS_REQUIRED`:
       message = `请提供密码`;
       statusCode = 400;
-      break
+      break;
     case `USER_ALREADY_EXIST`:
-        message = `用户已存在`;
-        statusCode = 409;
-        break
+      message = `用户已存在`;
+      statusCode = 409;
+      break;
     case `USER_DOES_NOT_EXIST`:
-        message = `用户不存在`;
-        statusCode = 400;
-        break
+      message = `用户不存在`;
+      statusCode = 400;
+      break;
     case `PASSWORD_DOES_NOT_MATCH`:
-          message = `用户密码错误`;
-          statusCode = 400;
-          break
+      message = `用户密码错误`;
+      statusCode = 400;
+      break;
+    case `UNAUTHORIZED`:
+      message = `请先登录`;
+      statusCode = 401;
+      break;
     default:
       statusCode = 500;
       message = '服务器暂时出了问题 ~~';
