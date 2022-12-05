@@ -48,6 +48,10 @@ export const defaultErrorHandler = (
       message = `请先登录`;
       statusCode = 401;
       break;
+    case `USER_DOES_NOT_OWN_RESOURCE`:
+      message = `你不能处理这个内容`;
+      statusCode = 403;
+      break;
     default:
       statusCode = 500;
       message = '服务器暂时出了问题 ~~';
