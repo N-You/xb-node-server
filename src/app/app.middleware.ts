@@ -52,6 +52,10 @@ export const defaultErrorHandler = (
       message = `你不能处理这个内容`;
       statusCode = 403;
       break;
+      case `FILE_NOT_FOUND`:
+        message = `文件不存在`;
+        statusCode = 404;
+        break;
     default:
       statusCode = 500;
       message = '服务器暂时出了问题 ~~';
