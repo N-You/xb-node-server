@@ -52,10 +52,18 @@ export const defaultErrorHandler = (
       message = `你不能处理这个内容`;
       statusCode = 403;
       break;
-      case `FILE_NOT_FOUND`:
-        message = `文件不存在`;
-        statusCode = 404;
-        break;
+    case `FILE_NOT_FOUND`:
+      message = `文件不存在`;
+      statusCode = 404;
+      break;
+    case `TAG_ALREADY_EXISTS`:
+      message = `标签已存在`;
+      statusCode = 400;
+      break;
+    case `POST_ALREADY_HAS_THIS_TAG`:
+      message = `内容已经存在标签`;
+      statusCode = 400;
+      break;
     default:
       statusCode = 500;
       message = '服务器暂时出了问题 ~~';

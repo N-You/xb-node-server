@@ -1,7 +1,7 @@
-import  { Router } from 'express';
+import { Router } from 'express';
 import * as postController from './post.controller';
 import { requestUrl } from '../app/app.middleware';
-import { authGuard,accessControl } from '../auth/auth.middleware';
+import { authGuard, accessControl } from '../auth/auth.middleware';
 
 const router: Router = Router();
 
@@ -9,13 +9,29 @@ const router: Router = Router();
 router.get('/posts', requestUrl, postController.index);
 
 /* 创建内容 */
-router.post('/posts',authGuard, postController.store);
+router.post('/posts', authGuard, postController.store);
 
 /* 更新数据 */
-router.patch('/posts/:postId',authGuard,accessControl({possession:true}), postController.update);
+router.patch(
+  '/posts/:postId',
+  authGuard,
+  accessControl({ possession: true }),
+  postController.update,
+);
 
 /* 删除数据 */
-router.delete('/posts/:postId', authGuard,accessControl({possession:true}),postController.destroy);
+router.delete(
+  '/posts/:postId',
+  authGuard,
+  accessControl({ possession: true }),
+  postController.destroy,
+);
+
+/* 添加内容标签 */
+router.post('/posts/:postId/tag',authGuard,accessControl({possession:true}),postController.storePostTag)
+
+/* 移除标签内容 */
+router.delete('/posts/:postId/tag',authGuard,accessControl({possession:true}),postController.destroyPostTag)
 
 /* 导出路由 */
 export default router;

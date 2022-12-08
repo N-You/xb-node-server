@@ -85,16 +85,16 @@ export const accessControl = (options: AccessControlOptions) => {
     const resourceId = parseInt(request.params[resourceIdParam], 10);
 
     // 检查资源拥有权
-    if(possession){
-      try{
-        const ownResource = await possess({resourceId,resourceType,userId})
+    if (possession) {
+      try {
+        const ownResource = await possess({ resourceId, resourceType, userId });
 
-        if(!ownResource) next(new Error('USER_DOES_NOT_OWN_RESOURCE'))
-      }catch(error){
-        return next(error)
+        if (!ownResource) next(new Error('USER_DOES_NOT_OWN_RESOURCE'));
+      } catch (error) {
+        return next(error);
       }
     }
-    
-    next()
+
+    next();
   };
 };

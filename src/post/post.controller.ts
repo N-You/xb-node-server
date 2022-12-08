@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import { Request, Response, NextFunction } from 'express';
-import { getPosts, createPost, updatePost, deletePost } from './post.service';
+import { getPosts, createPost, updatePost, deletePost,createPostTag,postHasTag, deletePostTag } from './post.service';
+import { TagModel } from '../tag/tag.model';
+import { getTagByName,createTag } from '../tag/tag.service';
 
 /* 内容列表 */
 export const index = async (
@@ -24,11 +26,11 @@ export const store = async (
 ) => {
   // 准备数据
   const { title, content } = request.body;
-  const {id:userId} = request.user
+  const { id: userId } = request.user;
 
   // 创建内容
   try {
-    const data = await createPost({ title, content,userId });
+    const data = await createPost({ title, content, userId });
     response.status(201).send(data);
   } catch (error) {
     next(error);
@@ -71,5 +73,76 @@ export const destroy = async (
     response.send(data);
   } catch (error) {
     next(error);
+  }
+};
+
+/* 
+添加标签内容
+*/
+export const storePostTag = async (
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) => {
+  const {postId} = request.params
+  const {name} = request.body
+
+  let tag: TagModel;
+
+  // console.log(postId,name); 
+  
+
+  // 查找标签内容
+  try{
+    tag = await getTagByName(name)
+  }catch(error){
+    return next(error)
+  }
+
+  // 找到标签，验证内容标签
+  if(tag){
+    try{
+      const postTag = await postHasTag(parseInt(postId,10),tag.id)
+      if(postTag) return next(new Error(`POST_ALREADY_HAS_THIS_TAG`))
+    }catch(error){
+      return next(error)
+    }
+  }
+
+  // 没有找到，创建标签
+  if(!tag){
+    try{
+      const data = await createTag({name})
+      tag = {id:data.inserId}
+    }catch(error){
+      return next(error)  
+    }
+  }
+
+  // 给内容打标签
+  try{
+    await createPostTag(parseInt(postId,10),tag.id)
+    response.sendStatus(201)
+  }catch(error){
+    return next(error)
+  }
+};
+
+/* 
+移除标签内容
+*/
+export const destroyPostTag = async (
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) => {
+  const {postId} = request.params
+  const {tagId} = request.body
+
+  try{
+    await deletePostTag(parseInt(postId,10),tagId)
+    response.sendStatus(200)
+  }catch(error){
+    next(error)
   }
 };
