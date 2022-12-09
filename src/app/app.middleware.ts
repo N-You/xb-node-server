@@ -64,6 +64,10 @@ export const defaultErrorHandler = (
       message = `内容已经存在标签`;
       statusCode = 400;
       break;
+    case `UNABLE_TO_REPLY_THIS_COMMENT`:
+      message = `无法回复此评论`;
+      statusCode = 400;
+      break;
     default:
       statusCode = 500;
       message = '服务器暂时出了问题 ~~';
