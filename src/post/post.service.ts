@@ -1,22 +1,47 @@
 import { connection } from '../app/database/mysql';
 import { PostModel } from './post.model';
+import { sqlFragment } from './post.provider';
 
 /* 获取列表内容 */
-export const getPosts: any = async () => {
+export interface GetPostsOptionsFilter {
+  name:string;
+  sql?:string;
+  param?:any
+}
+
+interface GetPostsOptions {
+  sort?: string;
+  filter?:GetPostsOptionsFilter
+}
+
+export const getPosts: any = async (options:GetPostsOptions) => {
+  const {sort,filter} = options
+
+  // SQL參數
+let params:Array<any> = []
+
+  if(filter.param){
+    params = [filter.param,...params]
+  }
+
   const statement = `
     SELECT 
       post.id,
       post.title,
       post.content,
-      JSON_OBJECT(
-        'id', user.id,
-        'name', user.name
-      ) as user
+      ${sqlFragment.user},
+      ${sqlFragment.totalComments},
+      ${sqlFragment.file},
+      ${sqlFragment.tags}
     FROM post
-    LEFT JOIN user
-      ON user.id = post.userId
+    ${sqlFragment.leftJoinUser}
+    ${sqlFragment.leftJoinOneFile}
+    ${sqlFragment.leftJoinTag}
+    WHERE ${filter.sql}
+    GROUP BY post.id
+    ORDER BY ${sort}
   `;
-  const [data] = await connection.promise().query(statement);
+  const [data] = await connection.promise().query(statement,params);
   return data;
 };
 
@@ -67,43 +92,39 @@ export const deletePost: any = async (postId: number) => {
 };
 
 /* 保存内容标签 */
-export const createPostTag:any = async(postId:number,tagId:number)=>{
+export const createPostTag: any = async (postId: number, tagId: number) => {
   const statement = `
   INSERT INTO post_tag (postId, tagId)
   VALUES(?, ?)
-  `
+  `;
 
-  const [data] = await connection.promise().query(statement,[postId,tagId])
+  const [data] = await connection.promise().query(statement, [postId, tagId]);
 
-  return data
-}
+  return data;
+};
 
 /* 
 检查标签内容
 */
-export const postHasTag:any = async (
- postId:number,
- tagId:number
-) => {
+export const postHasTag: any = async (postId: number, tagId: number) => {
   const statement = `
   SELECT * FROM post_tag
   WHERE postId=? AND  tagId=?
-  `
+  `;
 
-  const [data] = await connection.promise().query(statement,[postId,tagId])
+  const [data] = await connection.promise().query(statement, [postId, tagId]);
 
-  return data[0] ? true : false
+  return data[0] ? true : false;
 };
 
 /* 移除内容标签 */
-export const deletePostTag:any = async(
-  postId:number,tagId:number)=>{
-    const statement = `
+export const deletePostTag: any = async (postId: number, tagId: number) => {
+  const statement = `
     DELETE FROM post_tag
     WHERE postId = ? AND tagId = ?
-    `
+    `;
 
-    const [data] = await connection.promise().query(statement,[postId,tagId])
+  const [data] = await connection.promise().query(statement, [postId, tagId]);
 
-    return data
-  }
+  return data;
+};
