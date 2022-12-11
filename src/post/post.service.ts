@@ -4,24 +4,34 @@ import { sqlFragment } from './post.provider';
 
 /* 获取列表内容 */
 export interface GetPostsOptionsFilter {
-  name:string;
-  sql?:string;
-  param?:any
+  name: string;
+  sql?: string;
+  param?: any;
+}
+
+export interface GetPostsOptionsPagination {
+  limit: number;
+  offset: number;
 }
 
 interface GetPostsOptions {
   sort?: string;
-  filter?:GetPostsOptionsFilter
+  filter?: GetPostsOptionsFilter;
+  pagination?: GetPostsOptionsPagination;
 }
 
-export const getPosts: any = async (options:GetPostsOptions) => {
-  const {sort,filter} = options
+export const getPosts: any = async (options: GetPostsOptions) => {
+  const {
+    sort,
+    filter,
+    pagination: { limit, offset },
+  } = options;
 
   // SQL參數
-let params:Array<any> = []
+  let params: Array<any> = [limit,offset];
 
-  if(filter.param){
-    params = [filter.param,...params]
+  if (filter.param) {
+    params = [filter.param, ...params];
   }
 
   const statement = `
@@ -40,8 +50,10 @@ let params:Array<any> = []
     WHERE ${filter.sql}
     GROUP BY post.id
     ORDER BY ${sort}
+    LIMIT ?
+    OFFSET ?
   `;
-  const [data] = await connection.promise().query(statement,params);
+  const [data] = await connection.promise().query(statement, params);
   return data;
 };
 
@@ -127,4 +139,29 @@ export const deletePostTag: any = async (postId: number, tagId: number) => {
   const [data] = await connection.promise().query(statement, [postId, tagId]);
 
   return data;
+};
+
+/* 
+统计内容数量
+*/
+export const getPostsTotalCount = async (
+ options:GetPostsOptions
+) => {
+  const {filter} = options
+
+  let params = [filter.param]
+
+  const statement = `
+  SELECT
+    COUNT(DISTINCT post.id) AS total
+    FROM post
+    ${sqlFragment.leftJoinUser}
+    ${sqlFragment.leftJoinOneFile}
+    ${sqlFragment.leftJoinTag}
+    WHERE ${filter.sql}
+  `
+
+  const [data] = await connection.promise().query(statement,params)
+
+  return data[0].total
 };

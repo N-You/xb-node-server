@@ -2,12 +2,12 @@ import { Router } from 'express';
 import * as postController from './post.controller';
 import { requestUrl } from '../app/app.middleware';
 import { authGuard, accessControl } from '../auth/auth.middleware';
-import { sort,filter } from './post.middleware';
+import { sort, filter, paginate } from './post.middleware';
 
 const router: Router = Router();
 
 /* 内容列表 */
-router.get('/posts', sort,filter, postController.index);
+router.get('/posts', sort, filter, paginate, postController.index);
 
 /* 创建内容 */
 router.post('/posts', authGuard, postController.store);
@@ -29,10 +29,20 @@ router.delete(
 );
 
 /* 添加内容标签 */
-router.post('/posts/:postId/tag',authGuard,accessControl({possession:true}),postController.storePostTag)
+router.post(
+  '/posts/:postId/tag',
+  authGuard,
+  accessControl({ possession: true }),
+  postController.storePostTag,
+);
 
 /* 移除标签内容 */
-router.delete('/posts/:postId/tag',authGuard,accessControl({possession:true}),postController.destroyPostTag)
+router.delete(
+  '/posts/:postId/tag',
+  authGuard,
+  accessControl({ possession: true }),
+  postController.destroyPostTag,
+);
 
 /* 导出路由 */
 export default router;
