@@ -68,6 +68,10 @@ export const defaultErrorHandler = (
       message = `无法回复此评论`;
       statusCode = 400;
       break;
+    case `FILE_TYPE_NOT_ACCEPT`:
+      message = `不能上传此类型文件`;
+      statusCode = 400;
+      break;
     default:
       statusCode = 500;
       message = '服务器暂时出了问题 ~~';
