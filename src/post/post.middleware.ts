@@ -46,7 +46,7 @@ export const filter = async (
   // 设置默认过滤
   request.filter = {
     name: 'default',
-    sql: 'post.id IS NOT NULL', 
+    sql: 'post.id IS NOT NULL',
   };
 
   // 按标签名过滤
@@ -67,7 +67,16 @@ export const filter = async (
     };
   }
 
-  next()
+  // 过滤出用户赞过的内容
+  if (user && action == 'liked' && !tag) {
+    request.filter = {
+      name: 'userLiked',
+      sql: 'user_like_post.userId = ?',
+      param: user,
+    };
+  }
+
+  next();
 };
 
 /* 
@@ -78,16 +87,16 @@ export const paginate = async (
   response: Response,
   next: NextFunction,
 ) => {
-  const {page = 1} = request.query
+  const { page = 1 } = request.query;
 
   // 每页内容数量
-  const limit = parseInt(POSTS_PER_PAGE,10) || 30
+  const limit = parseInt(POSTS_PER_PAGE, 10) || 30;
 
   // 计算出偏移量
-  const offset = limit * (parseInt(page as string,10) -1)
+  const offset = limit * (parseInt(page as string, 10) - 1);
 
   // 设置请求中的分页
-  request.pagination = {limit,offset}
+  request.pagination = { limit, offset };
 
-  next()
+  next();
 };
