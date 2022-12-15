@@ -20,7 +20,6 @@ export const store = async (
 
   try{
     const data = await createComment(comment)
-
     response.status(201).send(data)
   }catch(error){
     next(error)
@@ -50,7 +49,6 @@ export const reply = async (
   try{
     // 检查评论是否为回复评论
     const reply = await isReplyComment(parentId)
-    console.log("🚀 ~ file: comment.controller.ts:53 ~ reply", reply)
 
     if(reply) return next(new Error('UNABLE_TO_REPLY_THIS_COMMENT'))
   }catch(error){
