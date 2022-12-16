@@ -1,6 +1,9 @@
 import { Router } from 'express';
+import { COMMENTS_PER_PAGE } from '../app/app.config';
+import { paginate } from '../post/post.middleware';
 import { accessControl, authGuard } from '../auth/auth.middleware';
 import * as commentController from './comment.controller';
+import { filter } from './comment.middleware';
 
 const router: Router = Router();
 
@@ -25,5 +28,11 @@ router.delete(
   accessControl({ possession: true }),
   commentController.destroy
 );
+
+// 评论列表
+router.get('/comments',paginate(COMMENTS_PER_PAGE),filter,commentController.index)
+
+/* 回复列表 */
+router.get('/comments/:commentId/replies',commentController.indexReplies)
 
 export default router;

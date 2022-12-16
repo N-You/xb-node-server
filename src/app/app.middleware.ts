@@ -76,6 +76,14 @@ export const defaultErrorHandler = (
       message = `没找到`;
       statusCode = 404;
       break;
+    case `USER_NOT_FOUND`:
+      message = `没找到该用户`;
+      statusCode = 404;
+      break;
+    case `PASSWORD_IS_THE_SAME`:
+      message = `输入密码与原密码一致`;
+      statusCode = 400;
+      break;
     default:
       statusCode = 500;
       message = '服务器暂时出了问题 ~~';

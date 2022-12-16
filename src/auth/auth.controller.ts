@@ -32,7 +32,5 @@ export const validate = (
   response: Response,
   next: NextFunction,
 ) => {
-  console.log(request.user);
-
   response.sendStatus(200);
 };
