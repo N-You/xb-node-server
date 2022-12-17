@@ -59,7 +59,7 @@ export const getUserById = getUser('user.id')
 /* 
 更新用户
 */
-export const updateUser = async (
+export const updateUser:any = async (
  userId:number,
  userData:UserModel
 ) => {
@@ -72,6 +72,22 @@ export const updateUser = async (
   const params = [userData,userId]
 
   const [data] = await connection.promise().query(statement,params)
+
+  return data
+};
+
+/* 
+删除用户
+*/
+export const deleteUser:any = async (
+ userId:number
+) => {
+  const statement = `
+  DELETE FROM user
+  WHERE id = ?
+  `
+
+  const [data] = await connection.promise().query(statement,userId)
 
   return data
 };
