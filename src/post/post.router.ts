@@ -8,7 +8,7 @@ import { POSTS_PER_PAGE } from '../app/app.config';
 const router: Router = Router();
 
 /* 内容列表 */
-router.get('/posts', sort, filter, paginate(POSTS_PER_PAGE), postController.index);
+router.get('/posts',sort, filter, paginate(POSTS_PER_PAGE), postController.index);
 
 /* 创建内容 */
 router.post('/posts', authGuard, postController.store);

@@ -40,26 +40,43 @@ export const authGuard = (
   next: NextFunction,
 ) => {
   console.log(' 验证用户身份');
+  
+  if(request.user.id){
+    next()
+  }else{
+    next(new Error('UNAUTHORIZED'));
+  }
+};
+
+
+/* 当前用户 */
+export const currentUser = (
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) => {
+  console.log(' 当前用户');
+  let user:TokenPayload = {
+    id:null,
+    name:'anyone'
+  }
   try {
     const authorization = request.header('Authorization');
-    if (!authorization) throw new Error();
 
     /* 提取JWT */
     const token = authorization.replace('Bearer ', '');
-    if (!token) throw new Error();
-
+    
     /* 验证令牌 */
-    const decoded = jwt.verify(token, PUBLIC_KEY, {
-      algorithms: ['RS256'],
-    });
-
-    // 在请求里添加当前用户
-    request.user = decoded as TokenPayload;
-
-    next();
+    if(token){
+      const decoded = jwt.verify(token, PUBLIC_KEY, {
+        algorithms: ['RS256'],
+      });
+      user = decoded as TokenPayload
+    }
   } catch (error) {
-    next(new Error('UNAUTHORIZED'));
   }
+  request.user = user
+  next();
 };
 
 /* 访问控制 */

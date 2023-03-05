@@ -3,7 +3,7 @@ import { APP_PORT } from './app/app.config';
 import { connection } from './app/database/mysql';
 
 app.listen(APP_PORT, () => {
-  console.log('服务器已启动~');
+  console.log('服务器已启动~'+APP_PORT);
 });
 
 // 测试使用数据服务连接

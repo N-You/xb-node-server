@@ -15,7 +15,7 @@ export const defaultErrorHandler = (
   request: Request,
   response: Response,
   next: NextFunction,
-) => {
+) => {  
   if (error.message) {
     console.log('error', error.message);
   }

@@ -13,6 +13,8 @@ import {
 } from './post.service';
 import { TagModel } from '../tag/tag.model';
 import { getTagByName, createTag } from '../tag/tag.service';
+import { currentUser } from '../auth/auth.middleware';
+import { deletePostFiles, getPostFiles } from '../file/file.service';
 
 /* 内容列表 */
 export const index = async (
@@ -20,6 +22,8 @@ export const index = async (
   response: Response,
   next: NextFunction,
 ) => {
+  console.log(request.user);
+  
   try{
     const totalCount = await getPostsTotalCount({filter:request.filter})
 
@@ -32,7 +36,8 @@ export const index = async (
     const posts = await getPosts({
       sort: request.sort,
       filter: request.filter,
-      pagination:request.pagination
+      pagination:request.pagination,
+      currentUser:request.user
     });
     response.send(posts);
   } catch (error) {
@@ -91,6 +96,12 @@ export const destroy = async (
 
   // 删除内容
   try {
+    const files = await getPostFiles(parseInt(postId,10))
+
+    if(files.length){
+      await deletePostFiles(files)
+    }
+
     const data = await deletePost(parseInt(postId, 10));
     response.send(data);
   } catch (error) {
@@ -178,7 +189,7 @@ export const show = async (
   const {postId} = request.params
 
   try{
-    const post = await getPostById(parseInt(postId,10))
+    const post = await getPostById(parseInt(postId,10),{currentUser:request.user })
 
     response.send(post)
   }catch(error){
