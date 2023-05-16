@@ -73,7 +73,7 @@ devDependencies:
 packages:
 
   github.com/types/mysql/c26b1bc2bac17010081455e3127a90fb2eafcec9:
-    resolution: {tarball: https://codeload.github.com/types/mysql/tar.gz/c26b1bc2bac17010081455e3127a90fb2eafcec9}
+    resolution: {commit: c26b1bc2bac17010081455e3127a90fb2eafcec9, repo: git+ssh://git@github.com/types/mysql.git, type: git}
     name: '@types/mysql'
     version: 2.0.0
     dev: true
