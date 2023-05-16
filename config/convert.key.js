@@ -10,6 +10,8 @@ const privateKeyBase64 = Buffer.from(privateKey).toString('base64')
 const publicKeyBase64 = Buffer.from(publicKey).toString('base64')
 
 /* 输出转换结果 */
+console.log('私钥base64格式')
 console.log(privateKeyBase64)
+console.log('公钥base64格式')
 console.log(publicKeyBase64)
 
