@@ -18,6 +18,6 @@ npm-debug.log*
 !.vscode/extensions.json
 
 # App
-.env*jj
+.env*
 config/*.key
 /uploads
